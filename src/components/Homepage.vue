@@ -92,27 +92,27 @@
 		/* height: 8em; */
 		/* margin: 2rem; */
 		/* border-radius: 2em; */
-		background: chocolate;
+		background: #efc6b2;
 		transition: all 1s;
 		flex-grow: 1;
 		/* flex-shrink: 2; */
 	}
 	.region__container .region__single:hover {
-		background: orangered;
+		background: #0d364a;
 		flex-grow: 10;
-
-		/* width: 50%; */
 		transition: all 2s;
 	}
 
 	.region__container .region__single:hover p {
 		font-size: 2.5em;
 		transition: all 1s;
+		color: #efc6b2;
 	}
 	.region__container a {
 		text-decoration: none;
 		align-self: center;
-		color: white;
+		/* color: white; */
+		color: #0d364a;
 	}
 	.region__container p {
 		/* font-size: 2.5em; */

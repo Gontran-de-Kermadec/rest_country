@@ -1,5 +1,4 @@
 // import Vue from "vue";
-// import VueRouter from "vue-router";
 import Region from "../components/Region.vue";
 import Homepage from "../components/Homepage.vue";
 import Country from "../components/Country.vue";

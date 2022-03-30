@@ -88,8 +88,6 @@
 
 <style scoped>
 	.searchbar__container {
-		/* position: relative; */
-
 		text-align: left;
 		margin: 2em 0;
 	}
@@ -102,7 +100,6 @@
 		width: 35vw;
 	}
 	input {
-		/* all: unset; */
 		width: 100%;
 		height: 3em;
 		border: none;
@@ -121,7 +118,6 @@
 	}
 	.result a {
 		display: flex;
-		/* border-bottom: solid 1px; */
 		text-decoration: none;
 		color: black;
 		margin: 0.5em 0 0.5em 0.5em;
@@ -137,8 +133,6 @@
 	.img__container {
 		width: 5em;
 		height: 3em;
-		/* border: solid 1px; */
-		/* border-right: solid 1px; */
 		box-shadow: 2px 3px 1px 0px;
 	}
 	.img__container img {

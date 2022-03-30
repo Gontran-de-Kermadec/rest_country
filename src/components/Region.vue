@@ -1,7 +1,5 @@
 <template>
-	<!-- <div>{{ $route.params.region }}</div> -->
 	<div>
-		<!-- <p>{{ regionEnglish }}</p> -->
 		<h1>{{ $route.params.region }}</h1>
 		<div class="region__container">
 			<div
@@ -18,7 +16,6 @@
 						params: {
 							region: region,
 							country: singleCountry,
-							//englishCountry: country.name.common,
 						},
 					}"
 				>
@@ -45,34 +42,11 @@
 			};
 		},
 		methods: {
-			// translateRegion: function (region) {
-			// 	switch (region) {
-			// 		case "Afrique":
-			// 			this.regionEnglish = "Africa";
-			// 			break;
-			// 		case "Amérique":
-			// 			this.regionEnglish = "Americas";
-			// 			break;
-			// 		case "Asie":
-			// 			this.regionEnglish = "Asia";
-			// 			break;
-			// 		case "Europe":
-			// 			this.regionEnglish = "Europe";
-			// 			break;
-			// 		case "Océanie":
-			// 			this.regionEnglish = "Oceania";
-			// 			break;
-			// 		default:
-			// 			console.log("failed");
-			// 	}
-			// },
 			getRegionFromApi() {
-				console.log(this.regionEnglish);
 				axios
 					.get(`https://restcountries.com/v3.1/region/${this.region}`)
 					.then((response) => {
 						// handle success
-						//console.log(response.data);
 						this.sortCountries(response.data);
 						this.allCountries = response.data;
 					})
@@ -82,12 +56,10 @@
 					});
 			},
 			getTarget(e) {
-				//console.log(e.target.child);
 				this.singleCountry = e.target.innerText;
 				console.log(this.singleCountry);
 			},
 			sortCountries(arr) {
-				//this.sortedCountries = this.allCountries.sort(function compare(a, b) {
 				arr.sort(function compare(a, b) {
 					if (a.name.common < b.name.common) return -1;
 					if (a.name.common > b.name.common) return 1;
@@ -114,17 +86,12 @@
 	}
 	.region__country {
 		margin: 2em;
-		/* border: solid; */
 		box-shadow: 1px 6px 6px 4px;
 		border-radius: 1em;
-		/* padding: 2em; */
 	}
 	.region__country a {
 		text-decoration: none;
 	}
-	/* .region__country a p {
-		pointer-events: none;
-	} */
 	.img__container {
 		height: 13em;
 		width: 13em;
