@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<form @submit.prevent="signup">
+		<form @submit.prevent="signup" v-if="!emailVerificationSent">
 			<!-- <form @submit.prevent="formValidation"> -->
 			<div class="form__control">
 				<input
@@ -64,19 +64,22 @@
 			</div>
 			<button type="submit" :disabled="isDisabled">Sign up</button>
 		</form>
+		<div v-else>
+			<p>An email has been sent to you !! Please confirm it.</p>
+			<p>When it's done, <span @click="checkEmailAddress">click here</span></p>
+		</div>
 	</div>
 </template>
 
 <script>
-	//import * as firebase from "firebase/app";
 	import "../firebaseConfig";
 	import {
 		getAuth,
 		createUserWithEmailAndPassword,
+		sendEmailVerification,
 		//onAuthStateChanged,
 	} from "firebase/auth";
 	import { getFirestore, collection, addDoc } from "firebase/firestore";
-	//console.log(createUserWithEmailAndPassword);
 	const auth = getAuth();
 	const db = getFirestore();
 	export default {
@@ -88,6 +91,7 @@
 				password: "",
 				passwordConfirm: "",
 				isDisabled: true,
+				emailVerificationSent: false,
 
 				//username
 				usernameSucces: false,
@@ -135,7 +139,6 @@
 				}
 			},
 			passwordValidation() {
-				//password
 				const passwordRegex = new RegExp(`['=?"]`, "g");
 				console.log(this.password.length);
 				if (this.password.length > 8) {
@@ -177,14 +180,26 @@
 					this.isDisabled = true;
 				}
 			},
+			// create a new user in firebase and send email to email address to verify it
 			signup() {
-				console.log(this.email, this.password);
 				createUserWithEmailAndPassword(auth, this.email, this.password)
 					.then((userCredential) => {
 						// Signed in
 						const user = userCredential.user;
-						console.log(user.uid);
-						this.createUserFile(user.uid);
+						console.log(process.env.VUE_APP_ROOT_URL + this.$route.path);
+						sendEmailVerification(user, {
+							//url: "http://localhost:8080/Europe/France",
+							url: process.env.VUE_APP_ROOT_URL + this.$route.path,
+						})
+							.then(() => {
+								// Email verification sent!
+								console.log("email verif sent !");
+								this.emailVerificationSent = true;
+								this.createUserFile(user.uid);
+							})
+							.catch((error) => {
+								console.log(error);
+							});
 					})
 					.catch((error) => {
 						const errorCode = error.code;
@@ -192,6 +207,11 @@
 						this.error = error.message;
 					});
 			},
+			checkEmailAddress() {
+				const user = auth.currentUser;
+				console.log(user);
+			},
+			//create a new user in firestore
 			async createUserFile(userId) {
 				console.log(this.country, this.note, this.location, this.user);
 				// Add a new document with a generated id.
@@ -203,8 +223,6 @@
 				console.log("Document written with ID: ", docRef.id);
 			},
 		},
-		// mounted() {
-		// },
 	};
 </script>
 

@@ -1,11 +1,11 @@
 <template>
 	<div class="notes__container">
 		<h2>Personal notebook</h2>
-		<div v-if="isLogged" @click="logOut" class="logout__btn">
+		<div v-if="isLogged && isemailVerified" @click="logOut" class="logout__btn">
 			<p>{{ username }}</p>
 			<button>Log out</button>
 		</div>
-		<div v-if="isLogged">
+		<div v-if="isLogged && isemailVerified">
 			<h3>Notes</h3>
 			<AddNote />
 			<div v-if="notes.length > 0">
@@ -15,7 +15,7 @@
 				<p>No notes currently !!!</p>
 			</div>
 		</div>
-		<div v-else class="not__connected">
+		<div v-else-if="isLogged === false" class="not__connected">
 			<!-- <p>Pas connecté</p> -->
 			<p>To write notes, please</p>
 			<div class="sign__buttons">
@@ -29,6 +29,9 @@
 				<Signin />
 			</div>
 		</div>
+		<div v-if="!isemailVerified && isLogged" class="email__alert">
+			<p>Please verify your email by clicking on link in your inbox</p>
+		</div>
 	</div>
 </template>
 
@@ -37,7 +40,6 @@
 	import AddNote from "./AddNote.vue";
 	import Signin from "./Signin.vue";
 	import Signup from "./Signup.vue";
-	//import SouvenirImgs from "./SouvenirImgs.vue";
 	import "../firebaseConfig";
 	import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 	import {
@@ -57,7 +59,6 @@
 	const auth = getAuth();
 	export default {
 		name: "Notes",
-		//props: ["currentCountry"],
 		components: {
 			Signin,
 			Signup,
@@ -70,9 +71,9 @@
 				isLogged: false,
 				isSignedUp: false,
 				isSignedIn: false,
+				isemailVerified: false,
 			};
 		},
-		//components: { AddNote },
 		computed: mapState({
 			userId: (state) => state.userId,
 			location: (state) => state.location,
@@ -82,6 +83,26 @@
 			username: (state) => state.username,
 		}),
 		methods: {
+			isEmailVerified() {
+				onAuthStateChanged(auth, (user) => {
+					console.log(user);
+					// console.log(user.emailVerified);
+					// if (!user.emailVerified) {
+					// 	console.log("mail non verifié !!!");
+					// 	this.isemailVerified = false;
+					// } else {
+					// 	console.log("mail verifié");
+					// 	this.isemailVerified = true;
+					// }
+					if (user && user.emailVerified) {
+						console.log("mail verifié");
+						this.isemailVerified = true;
+					} else {
+						console.log("mail non verifié ou pas de user connecté !!!");
+						this.isemailVerified = false;
+					}
+				});
+			},
 			isConnected() {
 				onAuthStateChanged(auth, (user) => {
 					if (user) {
@@ -96,7 +117,6 @@
 						this.getNotes();
 					} else {
 						// User is signed out
-						//console.log("user out");
 						this.isLogged = false;
 						this.clearNotes();
 					}
@@ -137,19 +157,9 @@
 						const username = doc.data().username;
 						this.$store.commit("GET_USERNAME", username);
 					});
-					//const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-					// this.notes = [];
-					// this.$store.commit("SAVE_NOTES");
-					// snapShot.forEach((doc) => {
-					// 	//console.log(doc.data());
-					// 	//this.notes.push({ ...doc.data(), id: doc.id });
-					// 	this.$store.commit("SAVE_NOTES", {
-					// 		...doc.data(),
-					// 		id: doc.id,
-					// 	});
-					// });
 				});
 			},
+			//function to collect notes from database regarding user id and country selected
 			async getNotes() {
 				console.log(this.country, this.userId);
 				const request = query(
@@ -158,29 +168,12 @@
 					where("userId", "==", this.userId)
 				);
 				const requestSnapshot = await getDocs(request);
-
-				console.log(requestSnapshot.query);
 				onSnapshot(requestSnapshot.query, (snapShot) => {
-					//const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-					//this.notes = [];
 					this.$store.commit("SAVE_NOTES");
 					snapShot.forEach((doc) => {
-						console.log(doc.data());
-						//const test = [];
-						// doc.data().photosUrl.forEach((photo) => {
-						// 	console.log(photo);
-						// 	getDownloadURL(
-						// 		ref(storage, `${this.userId}/${this.country}/${photo}`)
-						// 	).then((url) => {
-						// 		console.log(url);
-						// 		test.push(url);
-						// 	});
-						// });
-						//this.notes.push({ ...doc.data(), id: doc.id });
 						this.$store.commit("SAVE_NOTES", {
 							...doc.data(),
 							id: doc.id,
-							//test: test,
 						});
 					});
 				});
@@ -193,7 +186,6 @@
 			},
 			clearNotes() {
 				this.notes = [];
-				//this.content = false;
 			},
 			async deleteNote(e) {
 				console.log(e.path[3].dataset.noteId);
@@ -202,7 +194,6 @@
 				console.log("succesfully deleted");
 			},
 			getImgs() {
-				//console.log(this.notes);
 				this.$store.commit("SAVE_IMGS");
 				const listImg = ref(storage, `${this.userId}/${this.country}`);
 				//const pathReference = ref(storage);
@@ -211,15 +202,10 @@
 						console.log(x.fullPath);
 						getDownloadURL(ref(storage, x.fullPath)).then((url) => {
 							console.log(url);
-							//this.imgUrl = url;
 							this.$store.commit("SAVE_IMGS", url);
 						});
 					});
 				});
-				// this.imgUrl.map((img) => {
-				// 	console.log(img);
-				// 	getDownloadURL(ref(storage, `${this.userId}/${this.country}`));
-				// });
 			},
 			getImgsUrl() {
 				console.log(this.notes);
@@ -227,11 +213,19 @@
 		},
 		beforeMount() {
 			this.isConnected();
+			this.isEmailVerified();
 			this.getImgs();
-			//this.getNotes();
+			console.log(this.isemailVerified);
+			console.log(this.isLogged);
 		},
 		mounted() {
 			this.getImgsUrl();
+			console.log(process.env.VUE_APP_ROOT_URL + this.$route.path);
+		},
+		created() {
+			var get_current_url = window.location.pathname;
+
+			console.log(get_current_url);
 		},
 	};
 </script>
@@ -299,5 +293,13 @@
 	}
 	.note__container div:nth-child(2) {
 		width: 100%;
+	}
+	.email__alert {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		padding: 3em;
+		background: yellow;
 	}
 </style>
