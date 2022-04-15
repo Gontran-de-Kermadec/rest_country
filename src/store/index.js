@@ -3,6 +3,7 @@ import { createStore } from "vuex";
 export const store = createStore({
 	state: {
 		currentCountry: "",
+		currentRegion: "",
 		userId: "",
 		username: "",
 		location: "",
@@ -15,6 +16,10 @@ export const store = createStore({
 		GET_CURRENT_COUNTRY(state, data) {
 			state.currentCountry = data.toLowerCase();
 			console.log(state.currentCountry);
+		},
+		GET_CURRENT_REGION(state, data) {
+			state.currentRegion = data.toLowerCase();
+			console.log(state.currentRegion);
 		},
 		GET_USER_ID(state, data) {
 			state.userId = data.userId;

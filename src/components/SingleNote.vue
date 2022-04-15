@@ -28,6 +28,7 @@
 			:key="note.id"
 			:data-note-id="note.id"
 			class="note__container"
+			:id="note.id"
 		>
 			<!-- <div class="note__container" v-if="note.photosUrl !== ''"> -->
 			<div class="note__location">

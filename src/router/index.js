@@ -2,6 +2,7 @@
 import Region from "../components/Region.vue";
 import Homepage from "../components/Homepage.vue";
 import Country from "../components/Country.vue";
+import Profile from "../components/Profile.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 //Vue.use(VueRouter);
@@ -22,6 +23,11 @@ const routes = [
 		name: "Country",
 		component: Country,
 	},
+	{
+		path: "/:username",
+		name: "Profile",
+		component: Profile,
+	},
 ];
 
 // const router = new VueRouter({
@@ -31,6 +37,15 @@ const routes = [
 const router = createRouter({
 	history: createWebHistory(),
 	routes,
+	scrollBehavior(to) {
+		console.log(to);
+		if (to.hash) {
+			return {
+				selector: to.hash,
+				behavior: "smooth",
+			};
+		}
+	},
 });
 
 export default router;

@@ -77,6 +77,7 @@
 		},
 		computed: mapState({
 			country: (state) => state.currentCountry,
+			region: (state) => state.currentRegion,
 			userId: (state) => state.userId,
 			currentPhotosUrl: (state) => state.currentPhotosUrl,
 			imgsUrl: (state) => state.imgsUrl,
@@ -224,7 +225,7 @@
 					this.note,
 					this.location,
 					this.user,
-					//this.imgsUrl,
+					this.region,
 					this.urlImg
 				);
 				//Add a new document with a generated id.
@@ -233,7 +234,7 @@
 					country: this.country,
 					location: this.location,
 					userId: this.user,
-					//photosUrl: this.urlImg,
+					region: this.region,
 					photosUrl: this.allImgUrl,
 				});
 				console.log("Document written with ID: ", docRef.id);

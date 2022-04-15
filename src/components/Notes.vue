@@ -1,9 +1,12 @@
 <template>
 	<div class="notes__container">
 		<h2>Personal notebook</h2>
-		<div v-if="isLogged && isemailVerified" @click="logOut" class="logout__btn">
-			<p>{{ username }}</p>
-			<button>Log out</button>
+		<div v-if="isLogged && isemailVerified" class="logout__btn">
+			<router-link
+				:to="{ name: 'Profile', params: { username: username || 'jean' } }"
+				>{{ username }}
+			</router-link>
+			<button @click="logOut">Log out</button>
 		</div>
 		<div v-if="isLogged && isemailVerified">
 			<h3>Notes</h3>
@@ -221,11 +224,6 @@
 		mounted() {
 			this.getImgsUrl();
 			console.log(process.env.VUE_APP_ROOT_URL + this.$route.path);
-		},
-		created() {
-			var get_current_url = window.location.pathname;
-
-			console.log(get_current_url);
 		},
 	};
 </script>

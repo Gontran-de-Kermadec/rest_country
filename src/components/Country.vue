@@ -74,7 +74,7 @@
 			</div>
 			<!-- <p @click="getCurrencyCode">click</p> -->
 		</div>
-		<div class="personal__section">
+		<div v-if="isDataLoaded" class="personal__section">
 			<Notes />
 			<!-- <Notes :current-country="englishCountry" /> -->
 		</div>
@@ -101,6 +101,7 @@
 				mouseOutContinent: "",
 				mouseOverHome: "",
 				mouseOutHome: "",
+				isDataLoaded: false,
 			};
 		},
 		computed: mapState({
@@ -111,13 +112,6 @@
 			setCurrentCountry() {
 				this.$store.commit("GET_CURRENT_COUNTRY", this.$route.params.country);
 			},
-			// logParams() {
-			// 	console.log(this.$route.params);
-			// },
-			// dislayData() {
-			// 	this.isConnected();
-			// 	//this.getNotes();
-			// },
 			// isConnected() {
 			// 	onAuthStateChanged(auth, (user) => {
 			// 		if (user) {
@@ -147,8 +141,11 @@
 						// handle success
 						console.log(response.data);
 						this.datas = response.data;
+						//console.log(this.datas[0].region);
+						this.$store.commit("GET_CURRENT_REGION", this.datas[0].region);
 						//this.getCurrencyCode(this.datas);
 						this.getCurrencyCode();
+						this.isDataLoaded = true;
 					})
 					.catch((error) => {
 						// handle error
@@ -156,10 +153,6 @@
 					});
 			},
 			getCurrencyCode() {
-				//let newArr = await this.datas;
-				// let newArr = arr.map(({ languages }) => {
-				// 	return languages;
-				// });
 				let newArr = this.datas.map(({ languages }) => {
 					return languages;
 				});
@@ -213,7 +206,6 @@
 			this.setCurrentCountry();
 			this.getRegionFromApi();
 		},
-		// components: { Signup, Notes, Signin },
 		components: { Notes },
 	};
 </script>
@@ -227,8 +219,6 @@
 	}
 	.header__links a {
 		all: unset;
-		/* text-decoration: none;
-		color: #000; */
 	}
 	/* .links__position:hover a {
 		animation: changecolor 0.5s ease forwards;
