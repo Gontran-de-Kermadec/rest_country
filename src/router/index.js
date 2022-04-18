@@ -17,6 +17,7 @@ const routes = [
 		path: "/:region",
 		name: "Region",
 		component: Region,
+		props: true,
 	},
 	{
 		path: "/:region/:country",

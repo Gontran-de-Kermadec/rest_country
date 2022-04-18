@@ -2,8 +2,8 @@
 	<div>
 		<div v-for="data in datas" :key="data.area">
 			<div class="country__header">
-				<div class="header__links">
-					<div
+				<!-- <div class="header__links"> -->
+				<!-- <div
 						id="homepage"
 						:class="[mouseOverHome, mouseOutHome]"
 						@mouseover="addClass"
@@ -13,8 +13,13 @@
 							<router-link :to="{ name: 'Homepage' }">Homepage</router-link>
 							<div class="link__underline"></div>
 						</div>
-					</div>
-					<div
+					</div> -->
+				<Header_button
+					left-button-id="Homepage"
+					right-button-id="continent"
+					:region="data.region"
+				/>
+				<!-- <div
 						id="continent"
 						:class="[mouseOverContinent, mouseOutContinent]"
 						@mouseover="addClass"
@@ -27,8 +32,8 @@
 							</router-link>
 							<div class="link__underline"></div>
 						</div>
-					</div>
-				</div>
+					</div> -->
+				<!-- </div> -->
 				<h1>{{ data.name.common }}</h1>
 			</div>
 			<img :src="data.flags.png" />
@@ -90,6 +95,7 @@
 	// const auth = getAuth();
 	const axios = require("axios");
 	import Notes from "./Notes.vue";
+	import Header_button from "./small_components/Header_button.vue";
 	export default {
 		name: "Country",
 		data() {
@@ -206,7 +212,7 @@
 			this.setCurrentCountry();
 			this.getRegionFromApi();
 		},
-		components: { Notes },
+		components: { Notes, Header_button },
 	};
 </script>
 

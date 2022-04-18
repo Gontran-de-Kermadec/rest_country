@@ -1,10 +1,17 @@
 <template>
 	<div>
-		<header class="profile__header">
+		<!-- <div class="header__links"> -->
+		<Header_button
+			left-button-id="Homepage"
+			right-button-id="logout"
+			region=""
+		/>
+		<!-- </div> -->
+		<!-- <header class="profile__header">
 			<router-link :to="{ name: 'Homepage' }">Homepage</router-link>
-			<p>Hi {{ username }} !</p>
 			<button @click="logOut">Logout</button>
-		</header>
+		</header> -->
+		<p>Hi {{ username }} !</p>
 		<section class="profile__resume">
 			<p>Visited countries: x</p>
 			<p>To visit countries: x</p>
@@ -88,6 +95,7 @@
 	import { getAuth, signOut } from "firebase/auth";
 	const auth = getAuth();
 	import { getStorage, ref, deleteObject } from "firebase/storage";
+	import Header_button from "./small_components/Header_button.vue";
 	const storage = getStorage();
 	export default {
 		name: "Profile",
@@ -145,7 +153,6 @@
 				const noteId = e.target.parentElement.dataset.noteId;
 				console.log(noteId);
 				//delete from storage thanks to name of file
-
 				const docRef = doc(db, "notes", noteId);
 				const docSnap = await getDoc(docRef);
 				console.log(docSnap.data());
@@ -174,13 +181,22 @@
 			this.getAllUserNotes();
 		},
 		mounted() {},
+		components: { Header_button },
 	};
 </script>
 
 <style scoped>
+	.header__links {
+		position: relative;
+		font-size: 2em;
+		display: flex;
+		justify-content: space-between;
+	}
 	.profile__header {
 		display: flex;
 		justify-content: space-between;
+		padding: 2em 1em;
+		font-size: 1.2em;
 	}
 	.profile__header a,
 	.profile__header button {
