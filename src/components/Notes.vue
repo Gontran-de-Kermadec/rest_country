@@ -1,6 +1,17 @@
 <template>
 	<div class="notes__container">
 		<h2>Personal notebook</h2>
+		<div class="switch__container">
+			<p class="switch__visited switch__content">Visited</p>
+			<p
+				class="switch__toVisit switch__content"
+				:class="toVisit"
+				@click="toggleChoice"
+			>
+				To visit
+			</p>
+			<!-- <button @click="switchButton">{{ switchBtn }}</button> -->
+		</div>
 		<div v-if="isLogged && isemailVerified" class="logout__btn">
 			<router-link
 				:to="{ name: 'Profile', params: { username: username || 'jean' } }"
@@ -75,6 +86,8 @@
 				isSignedUp: false,
 				isSignedIn: false,
 				isemailVerified: false,
+				visited: false,
+				toVisit: "false",
 			};
 		},
 		computed: mapState({
@@ -213,6 +226,10 @@
 			getImgsUrl() {
 				console.log(this.notes);
 			},
+			toggleChoice() {
+				console.log();
+				this.toVisit = "true";
+			},
 		},
 		beforeMount() {
 			this.isConnected();
@@ -299,5 +316,12 @@
 		transform: translate(-50%, -50%);
 		padding: 3em;
 		background: yellow;
+	}
+	.switch__container {
+		display: flex;
+	}
+	.switch__content {
+		border: solid;
+		padding: 0.5em 2em;
 	}
 </style>

@@ -30,32 +30,32 @@
 			class="note__container"
 			:id="note.id"
 		>
-			<!-- <div class="note__container" v-if="note.photosUrl !== ''"> -->
-			<div class="note__location">
-				<h3>{{ note.location }}</h3>
-				<button @click="deleteNote" :data-note-id="note.id">Delete note</button>
-			</div>
-			<div class="note__container--flex" v-if="note.photosUrl.length !== 0">
-				<!-- <div class="note__img">
-					<img :src="note.photosUrl" alt="#" />
-				</div> -->
-				<div class="note__img">
-					<div class="note__img--zoom" @click="show(0, note.photosUrl[0])">
-						<p>ZOOM</p>
-					</div>
-					<img :src="note.photosUrl[0]" :alt="note.location" />
+			<div v-if="note.photosUrl.length > 0">
+				<div class="note__location">
+					<h3>{{ note.location }}</h3>
+					<button @click="deleteNote" :data-note-id="note.id">
+						Delete note
+					</button>
 				</div>
-				<div class="note__text">
-					<!-- <div class="note__location">
+				<div class="note__container--flex">
+					<div class="note__img">
+						<div class="note__img--zoom" @click="show(0, note.photosUrl[0])">
+							<p>ZOOM</p>
+						</div>
+						<img :src="note.photosUrl[0]" :alt="note.location" />
+					</div>
+					<div class="note__text">
+						<!-- <div class="note__location">
 						<h3>{{ note.location }}</h3>
 						<button @click="deleteNote">Delete</button>
 					</div> -->
-					<div class="note__content">
-						<p>{{ note.content }}</p>
+						<div class="note__content">
+							<p>{{ note.content }}</p>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div v-else class="note__container">
+			<div v-else>
 				<div class="note__text note__text--width">
 					<div class="note__location">
 						<h3>{{ note.location }}</h3>
@@ -78,7 +78,6 @@
 			@keyup.esc="test"
 			tabindex="0"
 		>
-			<!-- <div class="modal--posabsolute"> -->
 			<p @click="prevImg">prec</p>
 			<div
 				v-for="(photo, i) in noteImg"
@@ -243,7 +242,7 @@
 	} */
 	.note__container {
 		width: 80vw;
-		margin: 1em auto;
+		margin: 4em auto;
 		border: solid;
 		/* max-height: 35vh; */
 	}
@@ -252,9 +251,6 @@
 		justify-content: space-between;
 		/* border: solid; */
 		height: 35vh;
-		/* width: 80vw;
-		margin: 1em auto;
-		max-height: 35vh; */
 	}
 
 	.note__img {
