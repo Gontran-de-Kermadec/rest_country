@@ -6,15 +6,39 @@
 			right-button-id="logout"
 			region=""
 		/>
-		<!-- </div> -->
-		<!-- <header class="profile__header">
-			<router-link :to="{ name: 'Homepage' }">Homepage</router-link>
-			<button @click="logOut">Logout</button>
-		</header> -->
 		<p>Hi {{ username }} !</p>
 		<section class="profile__resume">
-			<p>Visited countries: x</p>
-			<p>To visit countries: x</p>
+			<div class="resume__countries">
+				<div class="countries__visited">
+					<p class="countries__visited__number">
+						Visited countries: {{ visitedCountries }}
+					</p>
+					<div class="visited__list__container">
+						<div
+							v-for="(country, index) in visitedCountriesList"
+							:key="index"
+							class="visited__list"
+						>
+							<p>{{ country }}</p>
+						</div>
+					</div>
+				</div>
+				<div class="countries__toVisit">
+					<p class="countries__toVisit__number">
+						To visit countries: {{ toVisitCountries }}
+					</p>
+					<div class="toVisit__list__container">
+						<div
+							v-for="(country, index) in toVisitCountriesList"
+							:key="index"
+							class="toVisit__list"
+						>
+							<p>{{ country }}</p>
+						</div>
+					</div>
+					<!-- <p>To visit countries list: {{ toVisitCountriesList }}</p> -->
+				</div>
+			</div>
 			<p>Delete account</p>
 			<p>Update profile</p>
 		</section>
@@ -41,22 +65,7 @@
 						Check page
 					</router-link>
 				</div>
-				<!-- <div
-					v-for="note in country"
-					:key="note.id"
-					:data-note-id="note.id"
-					class="single__note"
-				>
-					<div>
-						<h3>Location</h3>
-						<p>{{ note.location }}</p>
-					</div>
-					<div>
-						<h3>Content</h3>
-						<p>{{ note.content }}</p>
-					</div>
-					<div @click="deleteNote" class="single__note--delete">X</div>
-				</div> -->
+
 				<table>
 					<thead>
 						<tr>
@@ -102,6 +111,10 @@
 		data() {
 			return {
 				allUserNotes: [],
+				visitedCountries: "",
+				visitedCountriesList: [],
+				toVisitCountries: "",
+				toVisitCountriesList: [],
 			};
 		},
 		computed: mapState({
@@ -149,7 +162,6 @@
 					});
 			},
 			async deleteNote(e) {
-				//const noteId = e.target.dataset.noteId;
 				const noteId = e.target.parentElement.dataset.noteId;
 				console.log(noteId);
 				//delete from storage thanks to name of file
@@ -176,8 +188,26 @@
 				//delete from firestore thanks to id of document
 				await deleteDoc(doc(db, "notes", noteId));
 			},
+			async getVisitedCountries() {
+				console.log(this.userId);
+				const request = query(
+					collection(db, "countriesVisit"),
+					where("userId", "==", this.userId)
+				);
+				const requestSnapshot = await getDocs(request);
+				requestSnapshot.forEach((doc) => {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+					this.docId = doc.id;
+					this.visitedCountriesList = doc.data().visitedCountries;
+					this.visitedCountries = doc.data().visitedCountries.length;
+					this.toVisitCountriesList = doc.data().toVisitCountries;
+					this.toVisitCountries = doc.data().toVisitCountries.length;
+				});
+			},
 		},
 		beforeMount() {
+			this.getVisitedCountries();
 			this.getAllUserNotes();
 		},
 		mounted() {},
@@ -214,15 +244,11 @@
 		text-align: left;
 		text-transform: capitalize;
 	}
-	/* .single__note {
-		display: flex;
-		justify-content: space-between;
-	} */
+
 	.note__country--link {
 		align-self: center;
 		color: lightgray;
 		text-decoration: none;
-		/* margin: 0 2em; */
 	}
 	table {
 		all: unset;
@@ -253,5 +279,27 @@
 	tbody tr:hover .single__note--delete {
 		opacity: 1;
 		transition: all 0.5s;
+	}
+
+	.resume__countries {
+		display: flex;
+		justify-content: space-around;
+	}
+	.countries__visited,
+	.countries__toVisit {
+		position: relative;
+	}
+	.visited__list__container,
+	.toVisit__list__container {
+		position: absolute;
+		opacity: 0;
+	}
+	.visited__list,
+	.toVisit__list {
+		color: blue;
+	}
+	.countries__visited__number:hover + .visited__list__container,
+	.countries__toVisit__number:hover + .toVisit__list__container {
+		opacity: 1;
 	}
 </style>
