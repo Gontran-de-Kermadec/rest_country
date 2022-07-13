@@ -135,7 +135,7 @@
 						acc[cle].push(obj);
 						return acc;
 					}, {});
-					console.log(this.allUserNotes.guinea[0].region);
+					//console.log(this.allUserNotes.guinea[0].region);
 				});
 			},
 			logOut() {

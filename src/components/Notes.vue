@@ -1,23 +1,15 @@
 <template>
 	<div class="notes__container">
 		<h2>Personal notebook</h2>
-		<div class="switch__container">
-			<p class="switch__visited switch__content">Visited</p>
-			<p
-				class="switch__toVisit switch__content"
-				:class="toVisit"
-				@click="toggleChoice"
-			>
-				To visit
-			</p>
-			<!-- <button @click="switchButton">{{ switchBtn }}</button> -->
-		</div>
-		<div v-if="isLogged && isemailVerified" class="logout__btn">
-			<router-link
-				:to="{ name: 'Profile', params: { username: username || 'jean' } }"
-				>{{ username }}
-			</router-link>
-			<button @click="logOut">Log out</button>
+		<div v-if="isLogged && isemailVerified" class="notes__header">
+			<IsVisited />
+			<div class="logout__btn">
+				<router-link
+					:to="{ name: 'Profile', params: { username: username || 'jean' } }"
+					>{{ username }}
+				</router-link>
+				<button @click="logOut">Log out</button>
+			</div>
 		</div>
 		<div v-if="isLogged && isemailVerified">
 			<h3>Notes</h3>
@@ -54,6 +46,7 @@
 	import AddNote from "./AddNote.vue";
 	import Signin from "./Signin.vue";
 	import Signup from "./Signup.vue";
+	import IsVisited from "./notes_components/IsVisited.vue";
 	import "../firebaseConfig";
 	import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 	import {
@@ -78,6 +71,7 @@
 			Signup,
 			AddNote,
 			SingleNote,
+			IsVisited,
 		},
 		data() {
 			return {
@@ -255,9 +249,10 @@
 	h2 {
 		border-bottom: solid 1px;
 	}
-	.logout__btn {
+	/* .logout__btn,  */
+	.notes__header {
 		display: flex;
-		justify-content: flex-end;
+		justify-content: space-between;
 	}
 	.logout__btn p {
 		font-size: 2em;
