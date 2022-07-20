@@ -34,21 +34,17 @@
 </template>
 
 <script>
+	import { getAuth, signOut } from "firebase/auth";
+	const auth = getAuth();
 	export default {
 		name: "Header_button",
 		props: ["leftButtonId", "rightButtonId", "region"],
 		data() {
 			return {
-				// 	mouseOverContinent: "",
-				// mouseOutContinent: "",
-				// mouseOverHome: "",
-				// mouseOutHome: "",
 				mouseOverLeft: "",
 				mouseLeaveLeft: "",
 				mouseOverRight: "",
 				mouseLeaveRight: "",
-				// leftButtonId: "",
-				// rightButtonId: ""
 			};
 		},
 		methods: {
@@ -74,6 +70,16 @@
 					this.mouseOverRight = "";
 					this.mouseLeaveRight = "mouseout";
 				}
+			},
+			logOut() {
+				signOut(auth)
+					.then(() => {
+						console.log("Sign-out successful.");
+						this.$router.push({ name: "Homepage" });
+					})
+					.catch((error) => {
+						console.log(error);
+					});
 			},
 		},
 	};
