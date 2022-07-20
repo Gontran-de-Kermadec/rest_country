@@ -2,41 +2,14 @@
 	<div>
 		<div v-for="data in datas" :key="data.area">
 			<div class="country__header">
-				<!-- <div class="header__links"> -->
-				<!-- <div
-						id="homepage"
-						:class="[mouseOverHome, mouseOutHome]"
-						@mouseover="addClass"
-						@mouseleave="removeClass"
-					>
-						<div class="links__position">
-							<router-link :to="{ name: 'Homepage' }">Homepage</router-link>
-							<div class="link__underline"></div>
-						</div>
-					</div> -->
 				<Header_button
 					left-button-id="Homepage"
 					right-button-id="continent"
 					:region="data.region"
 				/>
-				<!-- <div
-						id="continent"
-						:class="[mouseOverContinent, mouseOutContinent]"
-						@mouseover="addClass"
-						@mouseleave="removeClass"
-					>
-						<div class="links__position">
-							<router-link
-								:to="{ name: 'Region', params: { region: data.region } }"
-								>{{ data.region }}
-							</router-link>
-							<div class="link__underline"></div>
-						</div>
-					</div> -->
-				<!-- </div> -->
 				<h1>{{ data.name.common }}</h1>
 			</div>
-			<img :src="data.flags.png" />
+			<img :src="data.flags.png" class="country__flag" />
 			<div>
 				<a :href="data.maps.googleMaps" target="_blank"
 					>Have a look on Google Maps</a
@@ -62,8 +35,8 @@
 					</p>
 				</div>
 				<div>
-					<h3 v-if="languages.length > 1">Langues:</h3>
-					<h3 v-else>Langue :</h3>
+					<h3 v-if="languages.length > 1">Languages:</h3>
+					<h3 v-else>Language :</h3>
 					<p v-for="language in languages" :key="language">{{ language }}</p>
 					<!-- {{ data.languages.eng }} -->
 				</div>
@@ -77,11 +50,9 @@
 					<p>{{ data.area }}km²</p>
 				</div>
 			</div>
-			<!-- <p @click="getCurrencyCode">click</p> -->
 		</div>
 		<div v-if="isDataLoaded" class="personal__section">
 			<Notes />
-			<!-- <Notes :current-country="englishCountry" /> -->
 		</div>
 	</div>
 </template>
@@ -269,11 +240,27 @@
 	.country__infos {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: space-evenly;
+		justify-content: center;
+	}
+	.country__infos > div {
+		background: rgba(0, 0, 0, 0.3);
+		width: 14%;
 	}
 	.country__infos h3 {
 		/* border: solid; */
-		padding: 1em;
+		background: #4b4b4e;
+		color: #fff;
+		margin: 0;
+		padding: 0.5em;
+		/* padding-top: 0; */
+	}
+	.country__infos p {
+		/* border: solid; */
+		padding-top: 2.5em;
+		font-size: 1.2em;
+	}
+	.country__flag {
+		box-shadow: black 1px 1px 5px 0px;
 	}
 	.img__container {
 		width: 7em;
