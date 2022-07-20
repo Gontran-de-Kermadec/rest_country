@@ -27,12 +27,17 @@
 				<button type="submit">Sign in</button>
 			</div>
 		</form>
+		<div @click="resetPassword">Forgot Password ?</div>
 	</div>
 </template>
 
 <script>
 	import "../firebaseConfig";
-	import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+	import {
+		getAuth,
+		signInWithEmailAndPassword,
+		sendPasswordResetEmail,
+	} from "firebase/auth";
 	const auth = getAuth();
 	export default {
 		name: "Signin",
@@ -45,7 +50,6 @@
 		},
 		methods: {
 			signin() {
-				//console.log(this.email, this.password);
 				this.error = "";
 				signInWithEmailAndPassword(auth, this.email, this.password)
 					.then((userCredential) => {
@@ -58,6 +62,27 @@
 						console.log(errorCode);
 						//this.error = error.message;
 						this.error = "Incorrect email address or password !!";
+					});
+			},
+			resetPassword() {
+				const actionCodeSettings = {
+					url: "http://localhost:8080/",
+					//   url: 'https://www.example.com/?email=' + firebase.auth().currentUser.email,
+				};
+				console.log(auth, this.email);
+				const email = prompt("please enter your email address");
+				console.log(email);
+				sendPasswordResetEmail(auth, email, actionCodeSettings)
+					.then(() => {
+						// Password reset email sent!
+						// ..
+						console.log("reset email sent");
+						alert("Password resert email sent !! Have a look in your spam.");
+					})
+					.catch((error) => {
+						const errorCode = error.code;
+						const errorMessage = error.message;
+						console.log(errorCode, errorMessage);
 					});
 			},
 		},
@@ -73,7 +98,6 @@
 		/* border-bottom: solid;
 		border-top: solid; */
 		text-align: left;
-		/* margin: 0.2em 0; */
 		padding: 0.5em 0;
 	}
 	#email {

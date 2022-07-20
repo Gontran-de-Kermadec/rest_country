@@ -15,7 +15,7 @@
 				class="switch__toVisit switch__content"
 				@click="visitOrToBeVisited('toVisit', toVisit)"
 			>
-				Visited
+				to Visit
 			</div>
 		</div>
 		<!-- <p

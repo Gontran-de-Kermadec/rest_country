@@ -40,7 +40,7 @@
 				</div>
 			</div>
 			<p>Delete account</p>
-			<p>Update profile</p>
+			<p @click="resetPassword">Reset password</p>
 		</section>
 		<h1>Your notes</h1>
 		<div class="allnotes__container">
@@ -101,7 +101,7 @@
 		doc,
 	} from "firebase/firestore";
 	const db = getFirestore();
-	import { getAuth, signOut } from "firebase/auth";
+	import { getAuth, signOut, sendPasswordResetEmail } from "firebase/auth";
 	const auth = getAuth();
 	import { getStorage, ref, deleteObject } from "firebase/storage";
 	import Header_button from "./small_components/Header_button.vue";
@@ -120,6 +120,8 @@
 		computed: mapState({
 			username: (state) => state.username,
 			userId: (state) => state.userId,
+			region: (state) => state.currentRegion,
+			country: (state) => state.currentCountry,
 		}),
 		methods: {
 			async getAllUserNotes() {
@@ -204,6 +206,26 @@
 					this.toVisitCountriesList = doc.data().toVisitCountries;
 					this.toVisitCountries = doc.data().toVisitCountries.length;
 				});
+			},
+			resetPassword() {
+				const region =
+					this.region.charAt(0).toUpperCase() + this.region.slice(1);
+				const country =
+					this.country.charAt(0).toUpperCase() + this.country.slice(1);
+				const actionCodeSettings = {
+					url: "http://localhost:8080/" + region + "/" + country,
+				};
+				console.log(auth.currentUser.email);
+				sendPasswordResetEmail(auth, auth.currentUser.email, actionCodeSettings)
+					.then(() => {
+						console.log("reset email sent");
+						alert("Password resert email sent !! Have a look in your spam.");
+					})
+					.catch((error) => {
+						const errorCode = error.code;
+						const errorMessage = error.message;
+						console.log(errorCode, errorMessage);
+					});
 			},
 		},
 		beforeMount() {
