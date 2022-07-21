@@ -71,14 +71,8 @@
 				</div>
 			</div>
 		</div>
-		<div
-			v-if="modalOn"
-			class="modal"
-			@click.self="displayModal"
-			@keyup.esc="test"
-			tabindex="0"
-		>
-			<p @click="prevImg">prec</p>
+		<div v-if="modalOn" class="modal" @click.self="displayModal" tabindex="0">
+			<button @click="prevImg">prec</button>
 			<div
 				v-for="(photo, i) in noteImg"
 				:key="i"
@@ -120,9 +114,6 @@
 			notes: (state) => state.notes,
 		}),
 		methods: {
-			test() {
-				console.log("ddjdjdj");
-			},
 			displayModal(e) {
 				console.log(e.target);
 				this.modalOn = !this.modalOn;
@@ -138,26 +129,7 @@
 			},
 			notesImgs(url) {
 				console.log(this.notes);
-				//if(url === )
-				// for (let i = 0; i <= this.notes.length; i++) {
-				// 	console.log(this.notes[i]);
-				// 	const element = this.notes[i].photosUrl.find((el) => el === url);
-				// 	console.log(element);
-				// 	if (element === "undefined") {
-				// 		console.log("mauvais array");
-				// 	} else {
-				// 		console.log(this.notes[i]);
-				// 	}
-				// }
-				// this.notes.map((note) => {
-				// 	const element = note.photosUrl.find((el) => el === url);
-				// 	if (element !== "undefined") {
-				// 		console.log(note.photosUrl);
-				// 	}
-				// 	//console.log(element);
-				// });
 				this.notes.forEach((note) => {
-					//const element =
 					if (note.photosUrl.length > 0) {
 						note.photosUrl.find((el, index, arr) => {
 							if (el === url) {
@@ -217,16 +189,11 @@
 						})
 						.catch((error) => {
 							console.log(error);
-							// Uh-oh, an error occurred!
 						});
 				}
 				//delete from firestore thanks to id of document
 				await deleteDoc(doc(db, "notes", noteId));
 			},
-		},
-		mounted() {
-			//this.changeBody()
-			//document.body.classList.add("visible");
 		},
 	};
 </script>
@@ -235,22 +202,15 @@
 	body {
 		background: pink;
 	}
-	/* .all__notes--container {
-		display: flex;
-		justify-content: space-around;
-		flex-wrap: wrap;
-	} */
 	.note__container {
 		width: 80vw;
 		margin: 4em auto;
 		border: solid;
-		/* max-height: 35vh; */
 	}
 	.note__container--flex {
 		display: flex;
 		justify-content: space-between;
-		/* border: solid; */
-		height: 35vh;
+		height: 30vh;
 	}
 
 	.note__img {
@@ -287,7 +247,6 @@
 		width: 100%;
 	}
 	.note__location {
-		/* border: solid; */
 		border-bottom: solid 1px;
 		background: pink;
 		position: relative;
@@ -307,7 +266,6 @@
 		position: absolute;
 		right: -2px;
 		top: -56px;
-		/* transform: translateY(-50%); */
 	}
 	.note__content {
 		overflow: hidden;
@@ -318,15 +276,18 @@
 		top: 0;
 		width: 100%;
 		height: 100%;
-		background: lightblue;
+		background: #000000e0;
 		z-index: 20;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 	.modal--posabsolute {
 		position: absolute;
 	}
 	.modal__img {
 		width: 60vw;
-		margin: auto;
+		/* margin: auto; */
 	}
 	.modal__img img {
 		object-fit: contain;
@@ -334,8 +295,6 @@
 		height: 100%;
 	}
 	.image__active {
-		/* width: 60vw;
-		margin: auto; */
 		height: 80vh;
 	}
 	.image__inactive {

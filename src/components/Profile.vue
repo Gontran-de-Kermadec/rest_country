@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<!-- <div class="header__links"> -->
 		<Header_button
 			left-button-id="Homepage"
 			right-button-id="logout"
@@ -36,10 +35,9 @@
 							<p>{{ country }}</p>
 						</div>
 					</div>
-					<!-- <p>To visit countries list: {{ toVisitCountriesList }}</p> -->
 				</div>
 			</div>
-			<p>Delete account</p>
+			<p @click="deleteUser">Delete account</p>
 			<p @click="resetPassword">Reset password</p>
 		</section>
 		<h1>Your notes</h1>
@@ -103,7 +101,7 @@
 	const db = getFirestore();
 	import { getAuth, signOut, sendPasswordResetEmail } from "firebase/auth";
 	const auth = getAuth();
-	import { getStorage, ref, deleteObject } from "firebase/storage";
+	import { getStorage, ref, deleteObject, listAll } from "firebase/storage";
 	import Header_button from "./small_components/Header_button.vue";
 	const storage = getStorage();
 	export default {
@@ -142,15 +140,12 @@
 					console.log(this.allUserNotes);
 					this.allUserNotes = arrayToReduce.reduce((acc, obj) => {
 						const cle = obj["country"];
-						// console.log(acc);
-						// console.log(cle);
 						if (!acc[cle]) {
 							acc[cle] = [];
 						}
 						acc[cle].push(obj);
 						return acc;
 					}, {});
-					//console.log(this.allUserNotes.guinea[0].region);
 				});
 			},
 			logOut() {
@@ -226,6 +221,31 @@
 						const errorMessage = error.message;
 						console.log(errorCode, errorMessage);
 					});
+			},
+			deleteUser() {
+				const fileRef = ref(storage, this.userId);
+				// const fileRef = ref(
+				// 	storage,
+				// 	"gs://rest-country.appspot.com" + this.userId
+				// );
+				console.log(fileRef);
+				listAll(fileRef)
+					.then((res) => {
+						console.log(res.prefixes);
+					})
+					.catch((error) => {
+						console.log(error);
+						// Uh-oh, an error occurred!
+					});
+				// deleteObject(fileRef)
+				// 	.then(() => {
+				// 		// File deleted successfully
+				// 		console.log("delete done");
+				// 	})
+				// 	.catch((error) => {
+				// 		console.log(error);
+				// 		// Uh-oh, an error occurred!
+				// 	});
 			},
 		},
 		beforeMount() {
@@ -314,11 +334,20 @@
 	.visited__list__container,
 	.toVisit__list__container {
 		position: absolute;
-		opacity: 0;
+		opacity: 1;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		border-radius: 1em;
+		border: solid;
+		padding: 0.5em;
+		min-width: 7em;
+		background: yellow;
 	}
 	.visited__list,
 	.toVisit__list {
-		color: blue;
+		/* color: blue; */
+		margin: 0.2em;
 	}
 	.countries__visited__number:hover + .visited__list__container,
 	.countries__toVisit__number:hover + .toVisit__list__container {

@@ -95,15 +95,6 @@
 		methods: {
 			isEmailVerified() {
 				onAuthStateChanged(auth, (user) => {
-					console.log(user);
-					// console.log(user.emailVerified);
-					// if (!user.emailVerified) {
-					// 	console.log("mail non verifié !!!");
-					// 	this.isemailVerified = false;
-					// } else {
-					// 	console.log("mail verifié");
-					// 	this.isemailVerified = true;
-					// }
 					if (user && user.emailVerified) {
 						console.log("mail verifié");
 						this.isemailVerified = true;
@@ -155,9 +146,7 @@
 			async getUserName(userId) {
 				const request = query(
 					collection(db, "users"),
-					//where("country", "==", this.country),
 					where("userId", "==", userId)
-					// where("userId", "==", this.userId)
 				);
 				const requestSnapshot = await getDocs(request);
 				console.log(requestSnapshot.query);
@@ -206,7 +195,6 @@
 			getImgs() {
 				this.$store.commit("SAVE_IMGS");
 				const listImg = ref(storage, `${this.userId}/${this.country}`);
-				//const pathReference = ref(storage);
 				list(listImg).then((img) => {
 					img.items.forEach((x) => {
 						console.log(x.fullPath);
@@ -217,9 +205,9 @@
 					});
 				});
 			},
-			getImgsUrl() {
-				console.log(this.notes);
-			},
+			// getImgsUrl() {
+			// 	console.log(this.notes);
+			// },
 			toggleChoice() {
 				console.log();
 				this.toVisit = "true";
@@ -233,8 +221,7 @@
 			console.log(this.isLogged);
 		},
 		mounted() {
-			this.getImgsUrl();
-			console.log(process.env.VUE_APP_ROOT_URL + this.$route.path);
+			// this.getImgsUrl();
 		},
 	};
 </script>
@@ -249,7 +236,6 @@
 	h2 {
 		border-bottom: solid 1px;
 	}
-	/* .logout__btn,  */
 	.notes__header {
 		display: flex;
 		justify-content: space-between;
@@ -261,7 +247,6 @@
 	.logout__btn button {
 		all: unset;
 		cursor: pointer;
-		/* margin: 1em 0; */
 		border: solid;
 		padding: 0.5em 1em;
 		background: lightyellow;

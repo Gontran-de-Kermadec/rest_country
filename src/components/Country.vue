@@ -10,10 +10,8 @@
 				<h1>{{ data.name.common }}</h1>
 			</div>
 			<img :src="data.flags.png" class="country__flag" />
-			<div>
-				<a :href="data.maps.googleMaps" target="_blank"
-					>Have a look on Google Maps</a
-				>
+			<div class="country__map">
+				<a :href="data.maps.googleMaps" target="_blank">Have a look on Maps</a>
 			</div>
 			<div class="country__infos">
 				<div>
@@ -60,10 +58,6 @@
 <script>
 	import { mapState } from "vuex";
 	import "../firebaseConfig";
-	//import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-	//import { getFirestore, collection, getDocs } from "firebase/firestore";
-	// const db = getFirestore();
-	// const auth = getAuth();
 	const axios = require("axios");
 	import Notes from "./Notes.vue";
 	import Header_button from "./small_components/Header_button.vue";
@@ -135,22 +129,6 @@
 				});
 				this.languages = Object.values(newArr[0]);
 			},
-			// getAirQuality() {
-			// 	axios
-			// 		.get(
-			// 			"http://api.airvisual.com/v2/nearest_city?key=c10ca4f7-42c8-4b2f-812f-d04c85aef002",
-			// 			// "http://api.airvisual.com/v2/countries?key=c10ca4f7-42c8-4b2f-812f-d04c85aef002",
-			// 			{
-			// 				headers: {},
-			// 			}
-			// 		)
-			// 		.then((resp) => {
-			// 			console.log(resp);
-			// 		})
-			// 		.catch((err) => {
-			// 			console.log(err);
-			// 		});
-			// },
 			signingUp() {
 				this.isSignedUp = !this.isSignedUp;
 			},
@@ -163,13 +141,8 @@
 					this.mouseOutContinent = "";
 					this.mouseOverContinent = "mouseover";
 				}
-				// this.mouseOut = "";
-				// this.mouseOver = "mouseover";
 			},
 			removeClass(e) {
-				console.log(e.currentTarget.classList);
-				// this.mouseOver = "";
-				// this.mouseOut = "mouseout";
 				if (e.currentTarget.id === "homepage") {
 					this.mouseOverHome = "";
 					this.mouseOutHome = "mouseout";
@@ -197,13 +170,6 @@
 	.header__links a {
 		all: unset;
 	}
-	/* .links__position:hover a {
-		animation: changecolor 0.5s ease forwards;
-	} */
-	/* .links__position:hover .link__underline {
-		animation: 0.5s ease forwards hoverup;
-
-	} */
 	#homepage.mouseover .link__underline,
 	#continent.mouseover .link__underline {
 		animation: 0.5s ease forwards hoverup;
@@ -241,26 +207,27 @@
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
+		margin-top: 2em;
 	}
 	.country__infos > div {
 		background: rgba(0, 0, 0, 0.3);
 		width: 14%;
 	}
 	.country__infos h3 {
-		/* border: solid; */
 		background: #4b4b4e;
 		color: #fff;
 		margin: 0;
 		padding: 0.5em;
-		/* padding-top: 0; */
 	}
 	.country__infos p {
-		/* border: solid; */
 		padding-top: 2.5em;
 		font-size: 1.2em;
 	}
 	.country__flag {
 		box-shadow: black 1px 1px 5px 0px;
+	}
+	.country__map a {
+		color: #000;
 	}
 	.img__container {
 		width: 7em;
