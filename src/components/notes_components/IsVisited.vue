@@ -18,13 +18,6 @@
 				to Visit
 			</div>
 		</div>
-		<!-- <p
-			class="switch__toVisit switch__content"
-			:class="toVisit"
-			@click="visitOrToBeVisited('toVisit', toVisit)"
-		>
-			To visit
-		</p> -->
 	</div>
 </template>
 
@@ -88,7 +81,6 @@
 				});
 			},
 			async visitOrToBeVisited(word, status) {
-				console.log(word, status);
 				if (word === "visit") {
 					if (status === "true") {
 						console.log("deja visite");
@@ -97,7 +89,6 @@
 						await updateDoc(docRef, {
 							visitedCountries: arrayRemove(this.country),
 						});
-						console.log("update done");
 					} else {
 						this.visit = "true";
 						this.toVisit = "";
@@ -173,7 +164,7 @@
 <style scoped>
 	.switch__container {
 		display: flex;
-		border: solid;
+		border: solid #0d1f2d;
 		border-radius: 25px;
 	}
 	.switch__content {
@@ -195,7 +186,7 @@
 		width: 100%;
 		height: 100%;
 		z-index: -1;
-		background: pink;
+		background: #0d1f2d;
 	}
 	.visited__animation {
 		transform: translateX(-100%);
@@ -214,5 +205,17 @@
 	.toVisit__animation.true {
 		transform: translateX(0);
 		transition: transform 0.5s ease-in;
+		color: #fff;
+	}
+	.switch__toVisit,
+	.switch__visited {
+		color: #000;
+		transition: color 0.5s ease-in;
+	}
+	.visited__animation.true + .switch__visited,
+	.toVisit__animation.true + .switch__toVisit {
+		/* transform: translateX(0); */
+		color: #fff;
+		transition: color 0.5s ease-in;
 	}
 </style>

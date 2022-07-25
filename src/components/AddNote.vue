@@ -283,7 +283,6 @@
 		top: 0;
 		width: 100%;
 		height: 100%;
-		/* transform: translate(-50%, -50%); */
 		background: rgba(0, 0, 0, 0.2);
 		z-index: 100;
 	}
@@ -294,7 +293,7 @@
 		transform: translate(-50%, -50%);
 		width: 50vw;
 		height: 60vh;
-		background: #708122;
+		background: #546a7b;
 		border-radius: 5em;
 	}
 	.form__add {
@@ -315,14 +314,13 @@
 	input {
 		border: none;
 		border-bottom: solid 1px;
-		background: #708122;
-		/* height: 3em; */
+		background: #546a7b;
 		padding: 0.2em 0;
 		font-size: 2em;
 	}
 	input:focus {
 		outline: none;
-		background: #efdd8d;
+		background: #dddde3;
 	}
 	input::placeholder {
 		color: #000;
@@ -330,7 +328,7 @@
 	textarea {
 		font-size: 1.5em;
 		height: 5em;
-		background: #708122;
+		background: #546a7b;
 		border: solid 1px black;
 	}
 	textarea::placeholder {
@@ -338,7 +336,7 @@
 	}
 	textarea:focus {
 		outline: none;
-		background: #efdd8d;
+		background: #dddde3;
 	}
 	.form__label {
 		text-align: left;
@@ -348,11 +346,15 @@
 	button {
 		all: unset;
 		border: none;
-		background: #efdd8d;
+		background: #0d1f2d;
 		font-size: 1.2em;
 		padding: 0.5em;
+		color: #fff;
 	}
 	#add__btn {
 		text-align: right;
+	}
+	#form_img {
+		color: #000;
 	}
 </style>

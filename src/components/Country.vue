@@ -210,11 +210,12 @@
 		margin-top: 2em;
 	}
 	.country__infos > div {
-		background: rgba(0, 0, 0, 0.3);
+		/* background: rgba(0, 0, 0, 0.3); */
+		background: #dddde3;
 		width: 14%;
 	}
 	.country__infos h3 {
-		background: #4b4b4e;
+		background: #546a7b;
 		color: #fff;
 		margin: 0;
 		padding: 0.5em;

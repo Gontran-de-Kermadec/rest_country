@@ -1,28 +1,5 @@
 <template>
 	<div v-if="notes.length > 0" class="all__notes--container">
-		<!-- <div
-			v-for="note in notes"
-			:key="note.id"
-			class="note__container"
-			:data-note-id="note.id"
-		>
-			<div v-if="note.photosUrl !== ''" class="note__img">
-				<img :src="note.photosUrl" alt="#" />
-			</div>
-			<div v-else></div>
-			<div class="note__text">
-				<div class="note__location">
-					<h3>{{ note.location }}</h3>
-					<button @click="deleteNote">Delete</button>
-				</div>
-				<div class="note__content">
-					<div>
-						<p>{{ note.content }}</p>
-					</div>
-				</div>
-			</div>
-		</div> -->
-
 		<div
 			v-for="note in notes"
 			:key="note.id"
@@ -30,32 +7,28 @@
 			class="note__container"
 			:id="note.id"
 		>
-			<div v-if="note.photosUrl.length > 0">
-				<div class="note__location">
-					<h3>{{ note.location }}</h3>
-					<button @click="deleteNote" :data-note-id="note.id">
-						Delete note
-					</button>
-				</div>
-				<div class="note__container--flex">
-					<div class="note__img">
-						<div class="note__img--zoom" @click="show(0, note.photosUrl[0])">
-							<p>ZOOM</p>
-						</div>
-						<img :src="note.photosUrl[0]" :alt="note.location" />
+			<div v-if="note.photosUrl.length > 0" class="note__container--flex">
+				<div class="note__img">
+					<div class="note__img--zoom" @click="show(note.photosUrl[0])">
+						<!-- <div class="note__img--zoom" @click="show(0, note.photosUrl[0])"> -->
+						<p>ZOOM</p>
 					</div>
-					<div class="note__text">
-						<!-- <div class="note__location">
+					<img :src="note.photosUrl[0]" :alt="note.location" />
+				</div>
+				<div class="note__text">
+					<div class="note__location">
 						<h3>{{ note.location }}</h3>
-						<button @click="deleteNote">Delete</button>
-					</div> -->
-						<div class="note__content">
-							<p>{{ note.content }}</p>
-						</div>
+						<button @click="deleteNote" :data-note-id="note.id">
+							Delete note
+						</button>
+					</div>
+					<div class="note__line"></div>
+					<div class="note__content">
+						<p>{{ note.content }}</p>
 					</div>
 				</div>
 			</div>
-			<div v-else>
+			<div v-else class="note__onlytext">
 				<div class="note__text note__text--width">
 					<div class="note__location">
 						<h3>{{ note.location }}</h3>
@@ -63,16 +36,15 @@
 							Delete note
 						</button>
 					</div>
+					<div class="note__line"></div>
 					<div class="note__content">
-						<div>
-							<p>{{ note.content }}</p>
-						</div>
+						<p>{{ note.content }}</p>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div v-if="modalOn" class="modal" @click.self="displayModal" tabindex="0">
-			<button @click="prevImg">prec</button>
+			<button @click="prevImg">Prev</button>
 			<div
 				v-for="(photo, i) in noteImg"
 				:key="i"
@@ -86,7 +58,7 @@
 					<img :src="photo" alt="" />
 				</div>
 			</div>
-			<button @click="nextImg">suiv</button>
+			<button @click="nextImg">Next</button>
 			<!-- </div> -->
 		</div>
 	</div>
@@ -119,16 +91,19 @@
 				this.modalOn = !this.modalOn;
 				document.body.classList.toggle("body__hidden");
 			},
-			show(index, url) {
+			// show(index, url) {
+			// 	this.notesImgs(url);
+			// 	this.src = url;
+			// 	this.modalOn = !this.modalOn;
+			// 	document.body.classList.toggle("body__hidden");
+			// },
+			show(url) {
 				this.notesImgs(url);
-				console.log(this.notesImgs);
 				this.src = url;
-				console.log(index, url);
 				this.modalOn = !this.modalOn;
 				document.body.classList.toggle("body__hidden");
 			},
 			notesImgs(url) {
-				console.log(this.notes);
 				this.notes.forEach((note) => {
 					if (note.photosUrl.length > 0) {
 						note.photosUrl.find((el, index, arr) => {
@@ -160,7 +135,6 @@
 				} else {
 					this.index = this.index - 1;
 				}
-				console.log(this.index);
 			},
 			nextImg() {
 				if (this.index === this.noteImg.length - 1) {
@@ -168,21 +142,15 @@
 				} else {
 					this.index = this.index + 1;
 				}
-				console.log(this.index);
 			},
 			async deleteNote(e) {
-				console.log(this.noteImg);
 				const noteId = e.target.dataset.noteId;
-
 				//delete from storage thanks to name of file
 				const docRef = doc(db, "notes", noteId);
 				const docSnap = await getDoc(docRef);
-				console.log(docSnap.data().photosUrl);
 				const urlRef = docSnap.data().photosUrl;
 				for (let element of urlRef) {
-					console.log(element);
 					const fileRef = ref(storage, element);
-					console.log(fileRef);
 					deleteObject(fileRef)
 						.then(() => {
 							// File deleted successfully
@@ -203,19 +171,20 @@
 		background: pink;
 	}
 	.note__container {
-		width: 80vw;
+		width: 60vw;
 		margin: 4em auto;
 		border: solid;
 	}
 	.note__container--flex {
 		display: flex;
 		justify-content: space-between;
-		height: 30vh;
+		height: 50vh;
 	}
 
 	.note__img {
-		width: 30%;
+		width: 100%;
 		position: relative;
+		border: solid 10px #dddde3;
 	}
 	.note__img:hover .note__img--zoom {
 		opacity: 1;
@@ -241,16 +210,21 @@
 		height: 100%;
 	}
 	.note__text {
-		width: 70%;
+		width: 100%;
 	}
 	.note__text--width {
 		width: 100%;
 	}
 	.note__location {
-		border-bottom: solid 1px;
-		background: pink;
 		position: relative;
 		z-index: 10;
+		padding: 1em 0;
+	}
+	.note__line {
+		border: solid 1px;
+		width: 50%;
+		margin: 0 auto;
+		background: #000;
 	}
 	.note__location h3 {
 		margin: 0;
@@ -262,7 +236,7 @@
 		margin: 1em 0;
 		border: solid;
 		padding: 0.5em 1em;
-		background: lightyellow;
+		background: #dddde3;
 		position: absolute;
 		right: -2px;
 		top: -56px;
@@ -271,12 +245,18 @@
 		overflow: hidden;
 		padding: 1em;
 	}
+	.note__onlytext .note__line {
+		width: 100%;
+	}
+	.note__onlytext .note__content {
+		padding: 3em;
+	}
 	.modal {
 		position: fixed;
 		top: 0;
 		width: 100%;
 		height: 100%;
-		background: #000000e0;
+		background: rgba(221, 221, 227, 0.7);
 		z-index: 20;
 		display: flex;
 		justify-content: center;
@@ -285,19 +265,23 @@
 	.modal--posabsolute {
 		position: absolute;
 	}
-	.modal__img {
-		width: 60vw;
-		/* margin: auto; */
-	}
 	.modal__img img {
 		object-fit: contain;
 		width: 100%;
 		height: 100%;
 	}
-	.image__active {
-		height: 80vh;
+	.modal__img > .image__active {
+		height: 85vh;
+		width: 60vw;
 	}
-	.image__inactive {
+	.modal__img > .image__inactive {
 		display: none;
+	}
+	.modal button {
+		all: unset;
+		background: #0d1f2d;
+		padding: 1em;
+		color: white;
+		cursor: pointer;
 	}
 </style>

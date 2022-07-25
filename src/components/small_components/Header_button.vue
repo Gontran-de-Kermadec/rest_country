@@ -49,12 +49,9 @@
 		},
 		methods: {
 			addClass(e) {
-				console.log(e.currentTarget.id);
-				//if (e.currentTarget.id === "homepage") {
 				if (e.currentTarget.id === this.leftButtonId) {
 					this.mouseLeaveLeft = "";
 					this.mouseOverLeft = "mouseover";
-					//} else if (e.currentTarget.id === "continent") {
 				} else if (e.currentTarget.id === this.rightButtonId) {
 					this.mouseLeaveRight = "";
 					this.mouseOverRight = "mouseover";
@@ -65,7 +62,6 @@
 				if (e.currentTarget.id === this.leftButtonId) {
 					this.mouseOverLeft = "";
 					this.mouseLeaveLeft = "mouseout";
-					//} else if (e.currentTarget.id === "continent") {
 				} else if (e.currentTarget.id === this.rightButtonId) {
 					this.mouseOverRight = "";
 					this.mouseLeaveRight = "mouseout";
@@ -96,6 +92,7 @@
 	.header__links button {
 		all: unset;
 		cursor: pointer;
+		color: #1f4e6f;
 	}
 	#Homepage.mouseover .link__underline,
 	#logout.mouseover .link__underline,
@@ -109,14 +106,14 @@
 	}
 	#Homepage.mouseover a,
 	#logout.mouseover button,
-	#continent.mouseover a {
+	/* #continent.mouseover a {
 		animation: changecolor 0.5s ease forwards;
-	}
+	} */
 	#Homepage.mouseout a,
 	#logout.mouseout button,
-	#continent.mouseout a {
+	/* #continent.mouseout a {
 		animation: removecolor 0.5s ease forwards;
-	}
+	} */
 	.links__position {
 		position: relative;
 	}
@@ -125,7 +122,7 @@
 		bottom: 0;
 		height: 2px;
 		width: 100%;
-		background: #000;
+		background: #1f4e6f;
 		z-index: 100;
 	}
 	#Homepage,
@@ -135,21 +132,6 @@
 	#continent {
 		margin: 0.5em;
 	}
-	/* .country__infos {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-evenly;
-	}
-	.country__infos h3 {
-		padding: 1em;
-	} */
-	/* .img__container {
-		width: 7em;
-		margin: 0 auto;
-	}
-	.img__container img {
-		width: 100%;
-	} */
 	@keyframes hoverup {
 		0% {
 			bottom: 0;

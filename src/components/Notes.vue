@@ -239,18 +239,27 @@
 	.notes__header {
 		display: flex;
 		justify-content: space-between;
+		margin: auto 1em;
 	}
 	.logout__btn p {
 		font-size: 2em;
 		align-self: center;
 	}
+	.logout__btn a {
+		display: inline-block;
+		transform: translateY(3px);
+		font-size: 1.7em;
+		text-decoration: none;
+		color: #1f4e6f;
+		margin: auto 1em;
+	}
 	.logout__btn button {
 		all: unset;
 		cursor: pointer;
-		border: solid;
+		border: solid #0d1f2d;
 		padding: 0.5em 1em;
-		background: lightyellow;
-		margin: 0 1em;
+		background: #0d1f2d;
+		color: white;
 	}
 	.sign__buttons span {
 		color: #000;
@@ -297,9 +306,10 @@
 		padding: 3em;
 		background: yellow;
 	}
-	.switch__container {
+	/* .switch__container {
 		display: flex;
-	}
+		border: solid #0d1f2d;
+	} */
 	.switch__content {
 		border: solid;
 		padding: 0.5em 2em;
