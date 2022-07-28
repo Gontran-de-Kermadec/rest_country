@@ -287,4 +287,14 @@
 			color: #000;
 		}
 	}
+	@media (max-width: 375px) {
+		.country__flag {
+			width: 90vw;
+		}
+	}
+	@media (max-width: 768px) {
+		.country__infos {
+			display: none;
+		}
+	}
 </style>

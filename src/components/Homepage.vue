@@ -94,4 +94,10 @@
 	.region__container p {
 		transition: all 1s;
 	}
+	@media (max-width: 768px) {
+		.region__container {
+			display: block;
+			height: 15vh;
+		}
+	}
 </style>

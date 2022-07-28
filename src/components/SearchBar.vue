@@ -136,4 +136,15 @@
 		width: 100%;
 		height: 100%;
 	}
+	@media (max-width: 768px) {
+		.searchbar__container {
+			display: flex;
+			flex-direction: column;
+			text-align: center;
+		}
+		.searchbar__input {
+			width: 80vw;
+			margin: 0.3em auto;
+		}
+	}
 </style>

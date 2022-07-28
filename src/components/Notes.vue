@@ -306,12 +306,20 @@
 		padding: 3em;
 		background: yellow;
 	}
-	/* .switch__container {
-		display: flex;
-		border: solid #0d1f2d;
-	} */
 	.switch__content {
 		border: solid;
 		padding: 0.5em 2em;
+	}
+
+	@media (max-width: 768px) {
+		.notes__header {
+			flex-direction: column-reverse;
+		}
+		.notes__container .logout__btn {
+			margin-bottom: 2em;
+		}
+		.logout__btn a {
+			margin: auto 0.2em;
+		}
 	}
 </style>

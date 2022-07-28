@@ -214,8 +214,17 @@
 	}
 	.visited__animation.true + .switch__visited,
 	.toVisit__animation.true + .switch__toVisit {
-		/* transform: translateX(0); */
 		color: #fff;
 		transition: color 0.5s ease-in;
+	}
+	@media (max-width: 768px) {
+		.switch__container {
+			width: 80vw;
+			margin: 0 auto;
+		}
+		.visited__container,
+		.toVisit__container {
+			width: 50%;
+		}
 	}
 </style>

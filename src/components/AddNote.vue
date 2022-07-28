@@ -357,4 +357,30 @@
 	#form_img {
 		color: #000;
 	}
+	@media (max-width: 600px) {
+		.form__container {
+			width: 90vw;
+		}
+	}
+
+	@media (min-width: 601px) and (max-width: 768px) {
+		.form__container {
+			width: 70vw;
+		}
+	}
+	@media (max-width: 768px) {
+		.form__container {
+			border-radius: 3em;
+		}
+		.form__control input {
+			font-size: 1em;
+		}
+		.form__label,
+		textarea {
+			font-size: 1.2em;
+		}
+		.note__container {
+			width: 90vw;
+		}
+	}
 </style>

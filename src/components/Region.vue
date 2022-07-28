@@ -92,6 +92,9 @@
 	.region__country a {
 		text-decoration: none;
 	}
+	.region__country {
+		width: 13em;
+	}
 	.img__container {
 		height: 13em;
 		width: 13em;
@@ -100,5 +103,13 @@
 		height: 100%;
 		width: 100%;
 		border-radius: 1em 1em 0 0;
+	}
+	@media (max-width: 768px) {
+		/* .region__country {
+			width: 13em;
+		} */
+		.img__container {
+			height: 9em;
+		}
 	}
 </style>

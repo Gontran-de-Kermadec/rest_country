@@ -59,7 +59,6 @@
 				</div>
 			</div>
 			<button @click="nextImg">Next</button>
-			<!-- </div> -->
 		</div>
 	</div>
 </template>
@@ -281,7 +280,22 @@
 		all: unset;
 		background: #0d1f2d;
 		padding: 1em;
-		color: white;
+		color: #fff;
 		cursor: pointer;
+	}
+	@media (max-width: 550px) {
+		.modal {
+			flex-direction: column;
+		}
+		.modal button {
+			width: 50vw;
+		}
+		.modal__img > .image__active {
+			width: 90vw;
+			height: 80vh;
+		}
+		.note__container {
+			width: 90vw;
+		}
 	}
 </style>
