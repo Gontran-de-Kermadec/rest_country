@@ -13,13 +13,11 @@
 				@blur="displayResults = false"
 			/>
 			<div class="absolute" v-if="query.length > 1">
-				<!-- <div class="absolute" v-if="query.length > 1 && displayResults"> -->
 				<div
 					class="result"
 					v-for="country in filteredResult"
 					:key="country.area"
 				>
-					<!-- <div > -->
 					<router-link
 						:to="{
 							name: 'Country',
@@ -31,7 +29,6 @@
 						</div>
 						<p class="name">{{ country.name.common }}</p>
 					</router-link>
-					<!-- </div> -->
 				</div>
 			</div>
 		</div>
@@ -56,7 +53,6 @@
 					.get("https://restcountries.com/v3.1/all")
 					.then((response) => {
 						// handle success
-						//console.log(response.data);
 						this.allCountries = response.data;
 					})
 					.catch((error) => {
@@ -116,15 +112,15 @@
 	.result {
 		padding: 0.2em 0;
 	}
+	.result:hover {
+		background: #dddde3;
+		transition: background 0.5s;
+	}
 	.result a {
 		display: flex;
 		text-decoration: none;
 		color: black;
 		margin: 0.5em 0 0.5em 0.5em;
-	}
-	.result:hover {
-		transition: background 0.5s;
-		background: lightgray;
 	}
 	.result a p {
 		margin: 0 0 0 1em;
@@ -134,6 +130,7 @@
 		width: 5em;
 		height: 3em;
 		box-shadow: 2px 3px 1px 0px;
+		margin-right: 1em;
 	}
 	.img__container img {
 		width: 100%;

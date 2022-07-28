@@ -5,42 +5,45 @@
 			right-button-id="logout"
 			region=""
 		/>
-		<p>Hi {{ username }} !</p>
+		<p class="hi_username">Hi {{ username }} !</p>
 		<section class="profile__resume">
 			<div class="resume__countries">
-				<div class="countries__visited">
-					<p class="countries__visited__number">
-						Visited countries: {{ visitedCountries }}
-					</p>
-					<div class="visited__list__container">
-						<div
-							v-for="(country, index) in visitedCountriesList"
-							:key="index"
-							class="visited__list"
-						>
-							<p>{{ country }}</p>
+				<div class="resume__countries__flex">
+					<div class="countries__visited">
+						<p class="countries__visited__number">
+							Visited countries: {{ visitedCountries }}
+						</p>
+						<div class="visited__list__container">
+							<div
+								v-for="(country, index) in visitedCountriesList"
+								:key="index"
+								class="visited__list"
+							>
+								<p>{{ country }}</p>
+							</div>
+						</div>
+					</div>
+					<div class="countries__toVisit">
+						<p class="countries__toVisit__number">
+							To visit countries: {{ toVisitCountries }}
+						</p>
+						<div class="toVisit__list__container">
+							<div
+								v-for="(country, index) in toVisitCountriesList"
+								:key="index"
+								class="toVisit__list"
+							>
+								<p>{{ country }}</p>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="countries__toVisit">
-					<p class="countries__toVisit__number">
-						To visit countries: {{ toVisitCountries }}
-					</p>
-					<div class="toVisit__list__container">
-						<div
-							v-for="(country, index) in toVisitCountriesList"
-							:key="index"
-							class="toVisit__list"
-						>
-							<p>{{ country }}</p>
-						</div>
-					</div>
-				</div>
+				<p @click="resetPassword" class="resume__countries__password">
+					Reset password
+				</p>
 			</div>
-			<p @click="deleteUser">Delete account</p>
-			<p @click="resetPassword">Reset password</p>
 		</section>
-		<h1>Your notes</h1>
+		<h1>Notes summary</h1>
 		<div class="allnotes__container">
 			<div
 				v-for="(country, key) in allUserNotes"
@@ -101,7 +104,7 @@
 	const db = getFirestore();
 	import { getAuth, signOut, sendPasswordResetEmail } from "firebase/auth";
 	const auth = getAuth();
-	import { getStorage, ref, deleteObject, listAll } from "firebase/storage";
+	import { getStorage, ref, deleteObject } from "firebase/storage";
 	import Header_button from "./small_components/Header_button.vue";
 	const storage = getStorage();
 	export default {
@@ -132,12 +135,9 @@
 				const requestSnapshot = await getDocs(request);
 				onSnapshot(requestSnapshot.query, (snapShot) => {
 					const arrayToReduce = []; //array to get data before applying reduce method
-					console.log(snapShot);
 					snapShot.forEach((doc) => {
-						console.log(doc.data());
 						arrayToReduce.push({ ...doc.data(), id: doc.id });
 					});
-					console.log(this.allUserNotes);
 					this.allUserNotes = arrayToReduce.reduce((acc, obj) => {
 						const cle = obj["country"];
 						if (!acc[cle]) {
@@ -160,18 +160,13 @@
 			},
 			async deleteNote(e) {
 				const noteId = e.target.parentElement.dataset.noteId;
-				console.log(noteId);
 				//delete from storage thanks to name of file
 				const docRef = doc(db, "notes", noteId);
 				const docSnap = await getDoc(docRef);
-				console.log(docSnap.data());
 				const urlRef = docSnap.data().photosUrl;
-				console.log(urlRef.length);
 				if (urlRef.length > 0) {
 					for (let element of urlRef) {
-						console.log(element);
 						const fileRef = ref(storage, element);
-						console.log(fileRef);
 						deleteObject(fileRef)
 							.then(() => {
 								// File deleted successfully
@@ -186,7 +181,6 @@
 				await deleteDoc(doc(db, "notes", noteId));
 			},
 			async getVisitedCountries() {
-				console.log(this.userId);
 				const request = query(
 					collection(db, "countriesVisit"),
 					where("userId", "==", this.userId)
@@ -196,11 +190,24 @@
 					// doc.data() is never undefined for query doc snapshots
 					console.log(doc.id, " => ", doc.data());
 					this.docId = doc.id;
-					this.visitedCountriesList = doc.data().visitedCountries;
+					//this.visitedCountriesList = doc.data().visitedCountries;
+					this.capitalizeFirstLetter(doc.data().visitedCountries, "visited");
 					this.visitedCountries = doc.data().visitedCountries.length;
-					this.toVisitCountriesList = doc.data().toVisitCountries;
+					this.capitalizeFirstLetter(doc.data().toVisitCountries, "toVisit");
+					//this.toVisitCountriesList = doc.data().toVisitCountries;
 					this.toVisitCountries = doc.data().toVisitCountries.length;
 				});
+			},
+			capitalizeFirstLetter(data, visitingStatus) {
+				const countries = data;
+				const capitalizedCountries = countries.map((country) => {
+					return country.charAt(0).toUpperCase() + country.slice(1);
+				});
+				if (visitingStatus === "visited") {
+					this.visitedCountriesList = capitalizedCountries;
+				} else {
+					this.toVisitCountriesList = capitalizedCountries;
+				}
 			},
 			resetPassword() {
 				const region =
@@ -221,31 +228,6 @@
 						const errorMessage = error.message;
 						console.log(errorCode, errorMessage);
 					});
-			},
-			deleteUser() {
-				const fileRef = ref(storage, this.userId);
-				// const fileRef = ref(
-				// 	storage,
-				// 	"gs://rest-country.appspot.com" + this.userId
-				// );
-				console.log(fileRef);
-				listAll(fileRef)
-					.then((res) => {
-						console.log(res.prefixes);
-					})
-					.catch((error) => {
-						console.log(error);
-						// Uh-oh, an error occurred!
-					});
-				// deleteObject(fileRef)
-				// 	.then(() => {
-				// 		// File deleted successfully
-				// 		console.log("delete done");
-				// 	})
-				// 	.catch((error) => {
-				// 		console.log(error);
-				// 		// Uh-oh, an error occurred!
-				// 	});
 			},
 		},
 		beforeMount() {
@@ -270,6 +252,15 @@
 		padding: 2em 1em;
 		font-size: 1.2em;
 	}
+	.hi_username {
+		padding: 0.5em 0;
+		font-size: 2em;
+	}
+	h1 {
+		background: #dddde3;
+		border-bottom: solid 1px;
+		padding: 0.5em 0;
+	}
 	.profile__header a,
 	.profile__header button {
 		all: unset;
@@ -289,8 +280,11 @@
 
 	.note__country--link {
 		align-self: center;
-		color: lightgray;
+		color: #dddde3;
 		text-decoration: none;
+	}
+	.note__country--link:hover {
+		color: #0d1f2d;
 	}
 	table {
 		all: unset;
@@ -310,7 +304,7 @@
 	}
 	tbody td {
 		padding: 1em;
-		word-break: break-all;
+		word-break: break-word;
 	}
 	.single__note--delete {
 		transform: translateX(40px);
@@ -322,35 +316,73 @@
 		opacity: 1;
 		transition: all 0.5s;
 	}
-
+	.profile__resume {
+		margin: 4em 1em;
+	}
 	.resume__countries {
 		display: flex;
-		justify-content: space-around;
+		justify-content: space-between;
 	}
+	.resume__countries__flex {
+		display: flex;
+	}
+	.resume__countries__password {
+		border: none;
+		background-color: #0d1f2d;
+		font-size: 1.2em;
+		padding: 0.5em;
+		color: #fff;
+		cursor: pointer;
+	}
+
 	.countries__visited,
 	.countries__toVisit {
 		position: relative;
+		background-color: #dddde3;
+		padding: 0.5em 1em;
+		box-shadow: 0 0 5px 2px;
+		border-radius: 0.3em;
+		/* transition: background-color 0.5s; */
+		transition: all 0.5s;
+		margin: 0 0.5em;
+	}
+	.countries__visited:hover,
+	.countries__toVisit:hover {
+		box-shadow: 0 0 2px 1px;
+		background: #0d1f2d;
+		color: #fff;
+		transition: color 0.5s;
 	}
 	.visited__list__container,
 	.toVisit__list__container {
 		position: absolute;
-		opacity: 1;
+		opacity: 0;
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
 		border-radius: 1em;
-		border: solid;
+		border: solid #0d1f2d 1px;
 		padding: 0.5em;
-		min-width: 7em;
-		background: yellow;
+		width: 32vw;
+		background: #dddde3;
+		transition: opacity 0.5s;
+		z-index: -10;
+	}
+	.countries__toVisit__number,
+	.countries__visited__number {
+		font-size: 1.2em;
 	}
 	.visited__list,
 	.toVisit__list {
-		/* color: blue; */
-		margin: 0.2em;
+		margin: 0.3em;
+		width: 7em;
+		text-align: center;
+		color: #0d1f2d;
 	}
-	.countries__visited__number:hover + .visited__list__container,
-	.countries__toVisit__number:hover + .toVisit__list__container {
+	.countries__visited:hover > .visited__list__container,
+	.countries__toVisit:hover > .toVisit__list__container {
 		opacity: 1;
+		transition: opacity 0.5s;
+		z-index: 10;
 	}
 </style>

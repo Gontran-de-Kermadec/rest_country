@@ -39,7 +39,6 @@
 
 <script>
 	import SearchBar from "./SearchBar.vue";
-	// const axios = require("axios");
 	export default {
 		name: "Homepage",
 		components: {
@@ -51,22 +50,8 @@
 			};
 		},
 		methods: {
-			// getApi() {
-			// 	axios
-			// 		.get("https://restcountries.com/v3.1/subregion/south")
-			// 		.then(function (response) {
-			// 			// handle success
-			// 			console.log(response.data);
-			// 		})
-			// 		.catch(function (error) {
-			// 			// handle error
-			// 			console.log(error);
-			// 		});
-			// },
 			getTarget(e) {
-				console.log(e.target.innerText);
 				this.region = e.target.innerText;
-				console.log(this.region);
 			},
 		},
 	};
@@ -75,27 +60,16 @@
 <style scoped>
 	.region__container {
 		display: flex;
-		/* justify-content: center; */
-		/* flex-wrap: wrap; */
 		height: 70vh;
 	}
-	/* a {
-		text-decoration: none;
-	} */
 	.region__container .region__single {
-		/* text-decoration: none; */
 		display: flex;
 		justify-content: center;
-		border: solid white 1px;
-		/* width: 25%; */
+		border: solid #fff 1px;
 		height: 100%;
-		/* height: 8em; */
-		/* margin: 2rem; */
-		/* border-radius: 2em; */
-		background: #efc6b2;
+		background: #dddde3;
 		transition: all 1s;
 		flex-grow: 1;
-		/* flex-shrink: 2; */
 	}
 	.region__container .region__single:hover {
 		background: #0d364a;
@@ -103,20 +77,21 @@
 		transition: all 2s;
 	}
 
+	.region__container .region__single p {
+		transition: all 1s;
+		color: #0d364a;
+	}
 	.region__container .region__single:hover p {
 		font-size: 2.5em;
 		transition: all 1s;
-		color: #efc6b2;
+		color: #dddde3;
 	}
 	.region__container a {
 		text-decoration: none;
 		align-self: center;
-		/* color: white; */
 		color: #0d364a;
 	}
 	.region__container p {
-		/* font-size: 2.5em; */
-		/* margin: 0 1em; */
 		transition: all 1s;
 	}
 </style>
